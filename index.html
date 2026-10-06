@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Website Portforlio</title>
+    
+    <!-- FIX: Changed the title so WhatsApp displays a safe, normal name -->
+    <title>My Web Portfolio</title>
+    
     <style>
         * {
             box-sizing: border-box;
@@ -65,7 +68,6 @@
             font-weight: bold;
         }
 
-        /* Fixed Button Layout for instant positioning */
         #abortBtn {
             padding: 12px 24px;
             font-size: 15px;
@@ -80,7 +82,6 @@
             z-index: 1000;
             white-space: nowrap;
             touch-action: none;
-            /* Hardcoded starting position to avoid transform bugs */
             left: 40%;
             top: 75%;
         }
@@ -112,24 +113,32 @@
 
         function getDeviceType() {
             const ua = navigator.userAgent;
-            if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) return "Tablet";
-            if (/iphone|android|phone/i.test(ua)) return "Mobile Phone";
+            if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) return "Tablet Platform";
+            if (/iphone|android|phone/i.test(ua)) return "Mobile Device";
             if (/macintosh|windows|linux/i.test(ua)) return "Desktop PC";
-            return "Device";
+            return "System Engine";
         }
         const device = getDeviceType();
 
         const logPhrases = [
-            "Injecting payload package...", "Bypassing protocol stack...", "Parsing partition tables...",
-            "Dumping system cache...", "Hijacking memory address...", "Routing through tor nodes...",
-            "Overwriting kernel pointers...", "Extracting profile cookies...", "Syncing cloud database...",
-            "Deleting local image directory...", "Brute-forcing local keychains...", "Mapping local network..."
+            "Initializing server deployment sequence...", 
+            "Connecting to Web Hosting Node v5.0.2...", 
+            "WARNING: Root compiler discrepancy discovered.",
+            "Attempting core data packet synchronization...",
+            `Extracting device configuration for [${device}]... [OK]`,
+            "Compiling fifth project architecture layout files...",
+            "CRITICAL: System handshake interrupted by network firewall.",
+            `Overwriting cache pathways inside [${device}] temporary files...`,
+            "Encrypting local application storage indexes...",
+            "FATAL ERR: Local device terminal control overridden remotely.",
+            "De-authenticating active browser cookies...",
+            "SYSTEM COMPROMISED: Absolute wipe protocol armed."
         ];
 
         function generateRandomHexLine() {
             let hex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
             let data = Array.from({length: 4}, () => Math.floor(Math.random()*256).toString(16).toUpperCase().padStart(2, '0')).join(" ");
-            return `>> MEM_DUMP [${hex}] :: ${data} -- OVERWRITE STATUS: OK`;
+            return `>> HOST_LOG [${hex}] :: STACK_TRACE -- INITIALIZATION FAILED`;
         }
 
         function runEndlessTerminal() {
@@ -139,11 +148,11 @@
             const roll = Math.random();
             
             if (roll < 0.4) {
-                line.textContent = ">> " + logPhrases[Math.floor(Math.random() * logPhrases.length)] + ` [${device}_SYS_X]`;
+                line.textContent = ">> " + logPhrases[Math.floor(Math.random() * logPhrases.length)];
             } else if (roll < 0.8) {
                 line.textContent = generateRandomHexLine();
             } else {
-                line.textContent = `>> CRITICAL STATUS: ${device} hardware sync forced...`;
+                line.textContent = `>> ALERT: [${device}] directory structure unstable...`;
                 line.classList.add('error-text');
             }
 
@@ -189,15 +198,13 @@
             if (!prankingActive) return;
             
             const margin = 40;
-            // Fallbacks (130 width, 45 height) used if browser delays reading size
             const btnWidth = button.offsetWidth || 130;
             const btnHeight = button.offsetHeight || 45;
 
             const maxX = window.innerWidth - btnWidth - margin;
-            const minY = 90; // Stays safely clear of the top blinking timer
+            const minY = 90; 
             const maxY = window.innerHeight - btnHeight - margin;
 
-            // Enforce safe math boundaries
             const safeMaxX = maxX > margin ? maxX : window.innerWidth - margin;
             const safeMaxY = maxY > minY ? maxY : window.innerHeight - margin;
 
@@ -208,14 +215,12 @@
             button.style.top = randomY + 'px';
         }
 
-        // Listens to movement triggers universally
         button.addEventListener('pointerenter', (e) => {
             moveButton();
         });
         
-        // Mobile fallback strategy: triggers movement instantly when first touched
         button.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Blocks the underlying ghost click
+            e.preventDefault(); 
             moveButton();
         });
 
@@ -234,13 +239,13 @@
                 button.style.backgroundColor = '#00ff00';
                 button.style.color = '#000';
                 button.style.borderColor = '#00ff00';
-                button.textContent = "SYSTEM DE-ENCRYPTED";
+                button.textContent = "SYSTEM FIXED";
                 countdownContainer.style.animation = "none";
                 countdownContainer.style.color = "#00ff00";
-                countdownContainer.innerHTML = "✅ THREAT NEUTRALIZED SUCCESSFULLY";
+                countdownContainer.innerHTML = "GENERATE CODE SUCCESSFUL";
                 
                 setTimeout(() => {
-                    alert("😂 Gotcha! Your device is completely fine. It's just an HTML/JS joke!");
+                    alert("😂 Gotcha! Your device is completely fine. It's just a 5th website launch joke!");
                 }, 300);
             }
         });
