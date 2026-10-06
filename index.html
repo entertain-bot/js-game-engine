@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>System Error</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            background-color: #050505;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            width: 100vw;
+            height: 100vh;
+            height: -webkit-fill-available;
+            overflow: hidden;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #countdown-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 10px;
+            font-size: clamp(14px, 3.5vw, 22px);
+            font-weight: bold;
+            color: #ff3333;
+            text-align: center;
+            background-color: rgba(5, 5, 5, 0.95);
+            z-index: 10;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        #terminal {
+            position: absolute;
+            top: 70px; 
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            padding: 20px;
+            background-color: transparent;
+            overflow: hidden;
+            font-size: clamp(11px, 2.5vw, 14px);
+            line-height: 1.5;
+            word-break: break-all;
+            z-index: 1;
+        }
+
+        .error-text {
+            color: #ff3333;
+            font-weight: bold;
+        }
+
+        /* Fixed Button Layout for instant positioning */
+        #abortBtn {
+            padding: 12px 24px;
+            font-size: 15px;
+            background-color: #ff3333;
+            color: white;
+            border: 1px solid #ff6666;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+            position: absolute;
+            z-index: 1000;
+            white-space: nowrap;
+            touch-action: none;
+            /* Hardcoded starting position to avoid transform bugs */
+            left: 40%;
+            top: 75%;
+        }
+
+        #abortBtn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="countdown-container">
+        ⚠️ CRITICAL TIME UNTIL SYSTEM SHUTDOWN: <span id="timer">45</span>s
+    </div>
+
+    <div id="terminal"></div>
+
+    <button id="abortBtn">Abort (20)</button>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const button = document.getElementById('abortBtn');
+        const timerDisplay = document.getElementById('timer');
+        const countdownContainer = document.getElementById('countdown-container');
+
+        let clickCount = 20; 
+        let timeLeft = 45;
+        let prankingActive = true;
+
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) return "Tablet";
+            if (/iphone|android|phone/i.test(ua)) return "Mobile Phone";
+            if (/macintosh|windows|linux/i.test(ua)) return "Desktop PC";
+            return "Device";
+        }
+        const device = getDeviceType();
+
+        const logPhrases = [
+            "Injecting payload package...", "Bypassing protocol stack...", "Parsing partition tables...",
+            "Dumping system cache...", "Hijacking memory address...", "Routing through tor nodes...",
+            "Overwriting kernel pointers...", "Extracting profile cookies...", "Syncing cloud database...",
+            "Deleting local image directory...", "Brute-forcing local keychains...", "Mapping local network..."
+        ];
+
+        function generateRandomHexLine() {
+            let hex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
+            let data = Array.from({length: 4}, () => Math.floor(Math.random()*256).toString(16).toUpperCase().padStart(2, '0')).join(" ");
+            return `>> MEM_DUMP [${hex}] :: ${data} -- OVERWRITE STATUS: OK`;
+        }
+
+        function runEndlessTerminal() {
+            if (!prankingActive) return;
+
+            const line = document.createElement('div');
+            const roll = Math.random();
+            
+            if (roll < 0.4) {
+                line.textContent = ">> " + logPhrases[Math.floor(Math.random() * logPhrases.length)] + ` [${device}_SYS_X]`;
+            } else if (roll < 0.8) {
+                line.textContent = generateRandomHexLine();
+            } else {
+                line.textContent = `>> CRITICAL STATUS: ${device} hardware sync forced...`;
+                line.classList.add('error-text');
+            }
+
+            terminal.appendChild(line);
+            
+            const calculatedMaxLines = Math.floor(terminal.offsetHeight / 22) || 15;
+            if (terminal.childNodes.length > calculatedMaxLines) {
+                terminal.removeChild(terminal.firstChild);
+            }
+            
+            setTimeout(runEndlessTerminal, Math.random() * 60 + 30);
+        }
+
+        setTimeout(runEndlessTerminal, 200);
+
+        const countdownInterval = setInterval(() => {
+            if (!prankingActive) {
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            timeLeft--;
+            timerDisplay.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                prankingActive = false;
+                
+                document.body.innerHTML = `
+                    <div style="color: #ff3333; font-size: 24px; font-weight: bold; text-align: center; padding-top: 40vh; width: 100vw; height: 100vh; background: #050505;">
+                        FATAL ERROR: SYSTEM SHUTDOWN INITIATED.<br><br>
+                        <span style="color: #666; font-size: 16px;">(Just kidding! Tap anywhere to exit the prank)</span>
+                    </div>
+                `;
+                document.body.addEventListener('click', () => {
+                    alert("😂 Caught you! It was just a website prank!");
+                    window.location.reload();
+                });
+            }
+        }, 1000);
+
+        function moveButton() {
+            if (!prankingActive) return;
+            
+            const margin = 40;
+            // Fallbacks (130 width, 45 height) used if browser delays reading size
+            const btnWidth = button.offsetWidth || 130;
+            const btnHeight = button.offsetHeight || 45;
+
+            const maxX = window.innerWidth - btnWidth - margin;
+            const minY = 90; // Stays safely clear of the top blinking timer
+            const maxY = window.innerHeight - btnHeight - margin;
+
+            // Enforce safe math boundaries
+            const safeMaxX = maxX > margin ? maxX : window.innerWidth - margin;
+            const safeMaxY = maxY > minY ? maxY : window.innerHeight - margin;
+
+            const randomX = Math.max(margin, Math.floor(Math.random() * safeMaxX));
+            const randomY = Math.max(minY, Math.floor(Math.random() * safeMaxY));
+
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+        }
+
+        // Listens to movement triggers universally
+        button.addEventListener('pointerenter', (e) => {
+            moveButton();
+        });
+        
+        // Mobile fallback strategy: triggers movement instantly when first touched
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Blocks the underlying ghost click
+            moveButton();
+        });
+
+        button.addEventListener('click', () => {
+            if (!prankingActive) return;
+            
+            clickCount--;
+            
+            if (clickCount > 0) {
+                button.textContent = `Abort (${clickCount})`;
+                moveButton(); 
+            } else {
+                prankingActive = false;
+                clearInterval(countdownInterval);
+                button.style.position = 'static';
+                button.style.backgroundColor = '#00ff00';
+                button.style.color = '#000';
+                button.style.borderColor = '#00ff00';
+                button.textContent = "SYSTEM DE-ENCRYPTED";
+                countdownContainer.style.animation = "none";
+                countdownContainer.style.color = "#00ff00";
+                countdownContainer.innerHTML = "✅ THREAT NEUTRALIZED SUCCESSFULLY";
+                
+                setTimeout(() => {
+                    alert("😂 Gotcha! Your device is completely fine. It's just an HTML/JS joke!");
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>
